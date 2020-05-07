@@ -15,14 +15,27 @@ Sub Ejecutar_SQL_en_AWS()
                             "AwsRegion=us-west-2;" & _
                             "S3OutputLocation=s3://aws-athena-query-results-992974280925-us-west-2/;" & _
                             "AuthenticationType=IAM Credentials;" & _
-                            "UID=YOUR_USER;" & _
-                            "PWD=YOUR_PASSWORD;"
+                            "UID=YOUR_USER;" & _    'Ingresa tu usuario
+                            "PWD=YOUR_PASSWORD;"    'Ingresa tu contraseña
 
     'Abrir conexión con la BBDD
     con.Open ConnectionString
 
     'Comprueba el estado de la conexion, si resulta 1 = objeto abierto o 0 = objeto cerrado segun W3School "ADO State Property"
-    MsgBox (con.State) 
+    Dim x As String
+        Select Case con.State
+            Case 0:
+                x = "No se ha podido establecer conexion con AWS."
+            Case 1:
+                x = "Conexion con AWS ha sido Exitosa."
+            Case 2:
+                x = "Conexion con AWS aun esta en proceso."
+            Case 4:
+                x = "Conexion con AWS está ejecutando un comando."
+            Case 8:
+                x = "AWS esta recuperando filas."
+        End Select
+    MsgBox x, vbInformation, "Estado de Conexion"
 
     'Timeout en segundos para ejecutar la SQL completa antes de reportar un error
     con.CommandTimeout = 900
